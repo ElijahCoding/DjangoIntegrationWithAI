@@ -16,15 +16,26 @@ const Draw = () => {
         const canvas = sketch.current.toDataURL()
 
         saveAs(canvas, 'digit.jpg')
+        sendData(canvas)
     }
 
     const handleReset = () => {
-        
+        sketch.current.clear()
+        sketch.current._backgroudColor('black')
+    }
+
+    const sendData = (c) => {
+
+    }
+
+    const getImageResult = (id) => {
+
     }
 
     return (
         <React.Fragment>
             <SketchField
+                ref={sketch}
                 width='800px'
                 height='800px'
                 style={styles.draw}
@@ -36,7 +47,7 @@ const Draw = () => {
             />
             <div className='mt-3'>
                 <Button onClick={handleSubmit} variant='primary'>Save</Button>
-                <Button onClick={() => {}} variant='secondary'>Reset</Button>
+                <Button onClick={handleReset} variant='secondary'>Reset</Button>
             </div>
         </React.Fragment>
     )
