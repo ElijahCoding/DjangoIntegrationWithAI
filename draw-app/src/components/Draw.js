@@ -1,7 +1,8 @@
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import {SketchField, Tools} from 'react-sketch'
-import {Button} from "react-bootstrap";
+import {Button, Alert} from "react-bootstrap";
 import {saveAs} from 'file-saver'
+import axios from 'axios'
 
 const styles = {
     draw: {
@@ -10,12 +11,14 @@ const styles = {
 }
 
 const Draw = () => {
+    const [send, setSend] = useState(false)
+
     const sketch = useRef()
 
     const handleSubmit = () => {
         const canvas = sketch.current.toDataURL()
 
-        saveAs(canvas, 'digit.jpg')
+        // saveAs(canvas, 'digit.jpg')
         sendData(canvas)
     }
 
@@ -25,7 +28,18 @@ const Draw = () => {
     }
 
     const sendData = (c) => {
+        const headers = {
+            'accept': 'application/json'
+        }
 
+        const fd = new FormData()
+        fd.append('image', c)
+
+        axios.post('http://127.0.0.1:8000/api/digits/', fd, {headers: headers})
+            .then(res => {
+                setSend(true)
+            })
+            .catch(err => console.log(err))
     }
 
     const getImageResult = (id) => {
@@ -34,6 +48,7 @@ const Draw = () => {
 
     return (
         <React.Fragment>
+            {send && <Alert variant="info">Successfully sent</Alert>}
             <SketchField
                 ref={sketch}
                 width='800px'
