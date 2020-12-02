@@ -19,3 +19,17 @@ y_test = to_categorical(y_test, 10)
 
 X_train, X_test = X_train/255, X_test/255
 
+def my_convnet_1():
+    model = Sequential()
+
+    model.add(Conv2D(32, (5, 5), input_shape=(28, 28, 1), activation='relu'))
+    model.add(MaxPooling2D(2, 2))
+
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(2, 2))
+
+    model.add(Flatten())
+    model.add(Dense(100, activation='relu'))
+
+    model.add(Dropout(0.5))
+    model.add(Dense(10, activation='softmax'))
