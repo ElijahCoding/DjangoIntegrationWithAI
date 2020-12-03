@@ -4,8 +4,9 @@ from keras.preprocessing.image import img_to_array
 from keras.preprocessing import image
 import cv2
 import numpy as np
-from tensorflow.python import ops
 from tensorflow.keras.models import load_model
+from django.conf import settings
+import os
 
 class Digit(models.Model):
     image = models.ImageField(upload_to='images')
@@ -24,5 +25,16 @@ class Digit(models.Model):
         resized = cv2.resize(new_img, dim, interpolation=cv2.INTER_AREA)
 
         ready = np.expand_dims(resized, axis=2)
-        ready = np.expand_dims(resized, axis=0)
+        ready = np.expand_dims(ready, axis=0)
+
+        try:
+            file_model = os.path.join(settings.BASE_DIR, 'cnn_model/CNN_model.h5')
+            model = load_model(file_model)
+            pred = np.argmax(model.predict(ready))
+            self.result = str(pred)
+
+        except:
+            print('Failed to classify')
+            self.result = 'Failed to classify'
+
         return super().save(*args, **kwargs)
