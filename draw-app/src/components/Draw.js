@@ -12,6 +12,7 @@ const styles = {
 
 const Draw = () => {
     const [send, setSend] = useState(false)
+    const [result, setResult] = useState()
 
     const sketch = useRef()
 
@@ -43,7 +44,8 @@ const Draw = () => {
     }
 
     const getImageResult = (id) => {
-
+        axios.get(`http://127.0.0.1:8000/api/digits/${id}`)
+            .then()
     }
 
     return (
