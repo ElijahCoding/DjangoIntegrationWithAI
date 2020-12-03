@@ -33,3 +33,23 @@ def my_convnet_1():
 
     model.add(Dropout(0.5))
     model.add(Dense(10, activation='softmax'))
+
+    model.compile(Adam(lr=0.01), loss='categorical_crossentropy', metrics=['accuracy'])
+
+    return model
+
+model = my_convnet_1()
+history = model.fit(X_train, y_train, epochs=10, validation_split=0.2, batch_size=256, verbose=1, shuffle=True)
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('loss')
+plt.legend(['training', 'validation'])
+plt.show()
+
+score = model.evaluate(X_test, y_test, verbose=0)
+
+print('error', score[0])
+print('accuracy', score[1])
+
+model.save('CNN_model.h5')
